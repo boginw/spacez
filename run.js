@@ -1,6 +1,6 @@
 // Constants
-let MARGIN = 40;
-let TORQUE = 0.005;
+const MARGIN = 40;
+const TORQUE = 0.005;
 let canv;
 
 // Assets
@@ -46,16 +46,16 @@ let u = 0;
 function preload() {
     // Load sound effects
     soundFormats('mp3', 'ogg');
-    explodeSound = loadSound('explode.mp3');
-    tingSound    = loadSound('ting.mp3');
-    thrustSound  = loadSound('thrust.mp3');
+    explodeSound = loadSound('assets/sound/explode.mp3');
+    tingSound    = loadSound('assets/sound/ting.mp3');
+    thrustSound  = loadSound('assets/sound/thrust.mp3');
 
     // Load sprites
-    shipImage = loadImage("rocket.svg");
-    tutorialImage = loadImage("tutorial.svg")
-    thrustImages.push(loadImage('thrust1.svg'));
-    thrustImages.push(loadImage('thrust2.svg'));
-    thrustImages.push(loadImage('thrust3.svg'));
+    shipImage = loadImage("assets/graphics/rocket.svg");
+    tutorialImage = loadImage("assets/graphics/tutorial.svg")
+    thrustImages.push(loadImage('assets/graphics/thrust1.svg'));
+    thrustImages.push(loadImage('assets/graphics/thrust2.svg'));
+    thrustImages.push(loadImage('assets/graphics/thrust3.svg'));
 }
 
 function setup() {
@@ -164,96 +164,102 @@ function newGame(){
     objective = new Boxy();
 }
 
-function Boxy(){
-    this.x = random(170, width - 170);
-    this.y = random(150, height - 250); 
-    this.w = 120;
-    this.h = 40;
-    this.body = Bodies.rectangle(
-        this.x, this.y, this.w, this.h, 
-        { isStatic: true, mass: 1 });
+class Boxy {
+    constructor() {
+        this.x = random(170, width - 170);
+        this.y = random(150, height - 250);
+        this.w = 120;
+        this.h = 40;
+        this.body = Bodies.rectangle(
+            this.x, this.y, this.w, this.h,
+            { isStatic: true, mass: 1 });
 
-    World.add(engine.world, this.body);
-
-    this.draw = function(){
+        World.add(engine.world, this.body);
+    }
+    
+    draw() {
         push();
         fill(255);
         translate(this.body.position.x, this.body.position.y);
         rectMode(CENTER);
         rotate(this.body.angle);
-        rect(0,0 , this.w, this.h);
-        fill(0)
+        rect(0, 0, this.w, this.h);
+        fill(0);
         textSize(32);
         text(score, -52, 10);
         pop();
     }
 
-    this.destroy = function(){
+    destroy() {
         World.remove(engine.world, this.body);
     }
 }
 
-var Rocket = function(m, x, y){ 
-    this.x = x;
-    this.y = y;
-    this.body = Bodies.fromVertices(this.x, this.y, [
-        {"x":256,"y":24},
-        {"x":231.3311,"y":41.0187},{"x":209.3760,"y":61.4227},
-        {"x":191.1132,"y":85.1678},{"x":178.3484,"y":112.2347},
-        {"x":173.2137,"y":141.6867},{"x":173.1757,"y":144.4707},
-        {"x":173.1757,"y":257.4121},{"x":97.8828,"y":313.8828},
-        {"x":97.8828,"y":406.1738},{"x":52.7050,"y":451.3496},
-        {"x":52.7050,"y":490.8242},{"x":67.2073,"y":490.8242},
-        {"x":97.2073,"y":490.8242},{"x":127.2073,"y":490.8242},
-        {"x":157.2073,"y":490.8242},{"x":187.2073,"y":490.8242},
-        {"x":217.2073,"y":490.8242},{"x":247.2073,"y":490.8242},
-        {"x":277.2073,"y":490.8242},{"x":307.2073,"y":490.8242},
-        {"x":337.2073,"y":490.8242},{"x":367.2073,"y":490.8242},
-        {"x":397.2073,"y":490.8242},{"x":427.2073,"y":490.8242},
-        {"x":457.2073,"y":490.8242},{"x":459.2949,"y":490.8242},
-        {"x":459.2949,"y":451.3496},{"x":414.1172,"y":406.1738},
-        {"x":414.1172,"y":313.8828},{"x":338.8242,"y":257.4121},
-        {"x":338.8242,"y":144.4707},{"x":337.6966,"y":129.3276},
-        {"x":329.1781,"y":100.6604},{"x":313.8760,"y":74.9265},
-        {"x":293.9093,"y":52.5838},{"x":270.7720,"y":33.5263}]
-    );
-    Matter.Body.scale(this.body, 0.10, 0.10)
-    this.body.mass = m
+class Rocket {
+    constructor(m, x, y) {
+        this.x = x;
+        this.y = y;
+        this.body = Bodies.fromVertices(this.x, this.y, [
+            { "x": 256, "y": 24 },
+            { "x": 231.3311, "y": 41.0187 }, { "x": 209.3760, "y": 61.4227 },
+            { "x": 191.1132, "y": 85.1678 }, { "x": 178.3484, "y": 112.2347 },
+            { "x": 173.2137, "y": 141.6867 }, { "x": 173.1757, "y": 144.4707 },
+            { "x": 173.1757, "y": 257.4121 }, { "x": 97.8828, "y": 313.8828 },
+            { "x": 97.8828, "y": 406.1738 }, { "x": 52.7050, "y": 451.3496 },
+            { "x": 52.7050, "y": 490.8242 }, { "x": 67.2073, "y": 490.8242 },
+            { "x": 97.2073, "y": 490.8242 }, { "x": 127.2073, "y": 490.8242 },
+            { "x": 157.2073, "y": 490.8242 }, { "x": 187.2073, "y": 490.8242 },
+            { "x": 217.2073, "y": 490.8242 }, { "x": 247.2073, "y": 490.8242 },
+            { "x": 277.2073, "y": 490.8242 }, { "x": 307.2073, "y": 490.8242 },
+            { "x": 337.2073, "y": 490.8242 }, { "x": 367.2073, "y": 490.8242 },
+            { "x": 397.2073, "y": 490.8242 }, { "x": 427.2073, "y": 490.8242 },
+            { "x": 457.2073, "y": 490.8242 }, { "x": 459.2949, "y": 490.8242 },
+            { "x": 459.2949, "y": 451.3496 }, { "x": 414.1172, "y": 406.1738 },
+            { "x": 414.1172, "y": 313.8828 }, { "x": 338.8242, "y": 257.4121 },
+            { "x": 338.8242, "y": 144.4707 }, { "x": 337.6966, "y": 129.3276 },
+            { "x": 329.1781, "y": 100.6604 }, { "x": 313.8760, "y": 74.9265 },
+            { "x": 293.9093, "y": 52.5838 }, { "x": 270.7720, "y": 33.5263 }
+        ]
+        );
+        Matter.Body.scale(this.body, 0.10, 0.10);
+        this.body.mass = m;
 
-    World.add(engine.world, this.body);
+        World.add(engine.world, this.body);
+    }
 
-    this.draw = function(d){
+    draw(d) {
         push();
         translate(this.body.position.x, this.body.position.y);
         rectMode(RADIUS);
         rotate(this.body.angle);
-        triangle()
+        triangle();
         image(shipImage, -28, -28, 48, 48);
 
-        if(d){
-            image(thrustImages[(++u)%3], -11, 20, 15, 20);  
+        if (d) {
+            image(thrustImages[(++u) % 3], -11, 20, 15, 20);
         }
         pop();
 
-        if(this.body.position.x < -MARGIN){
-            Matter.Body.setPosition(this.body, 
+        if (this.body.position.x < -MARGIN) {
+            Matter.Body.setPosition(this.body,
                 { "x": width, "y": this.body.position.y });
-        } else if(this.body.position.x > width + MARGIN){
-            Matter.Body.setPosition(this.body, 
+        } else if (this.body.position.x > width + MARGIN) {
+            Matter.Body.setPosition(this.body,
                 { "x": 0, "y": this.body.position.y });
-        } else if(this.body.position.y < -1000){
+        } else if (this.body.position.y < -1000) {
             explode();
-        } else if(this.body.position.y > height){
+        } else if (this.body.position.y > height) {
             explode();
         }
     }
 
-    this.thrust = function(d){
-        if(d){
+    thrust(d) {
+        if (d) {
             thrustSound.stop();
             return;
         }
-        if(!thrustSound.isPlaying()){
+        
+        if (!thrustSound.isPlaying()) {
             thrustSound.play();
         }
     }
